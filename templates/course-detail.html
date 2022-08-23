@@ -1,0 +1,13 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+
+{% block main %}
+    <img src="{{course.image.url}}" alt="">
+    <p>{{course.title}}</p>
+    <h3>Lessons</h3>
+    <ul>
+        {% for lesson in course.lesson_set.all %}
+            <li><a href="{% url 'lesson-detail' pk=lesson.pk %}">{{lesson.title}}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock main %}

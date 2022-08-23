@@ -1,0 +1,16 @@
+{% extends 'layout/layout.html' %}
+
+{% block main %}
+    <h1>Tag List</h1>
+    <ul>
+        {% for tag in tags %}
+            <li>{{tag.title}}</li>
+        {% endfor %}
+    </ul>
+
+    <form action="{% url 'create-tag' %}" method="POST">
+        {% csrf_token %}
+        {{form.as_div}}
+        <input type="submit">
+    </form>
+{% endblock main %}
