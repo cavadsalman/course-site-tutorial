@@ -1,0 +1,14 @@
+{% extends 'layout/layout.html' %}
+
+{% block title %}
+<title>Register</title>
+{% endblock title %}
+
+{% block main %}
+    <h1>{{user_type}} Register Panel</h1>
+    <form action="{{request.get_full_path}}" method="post">
+        {% csrf_token %}
+        {{form.as_div}}
+        <input type="submit">
+    </form>
+{% endblock main %}

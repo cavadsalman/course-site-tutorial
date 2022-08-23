@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+
 from .forms import (
     TagForm, 
     CourseForm, 
@@ -10,6 +12,8 @@ from .models import Course, Tag, Lesson
 from django.db.models import Count
 
 # Create your views here.
+
+@login_required(login_url='login-student')
 def course_list(request):
     courses = Course.objects.all()
     tags = Tag.objects.all()
@@ -36,7 +40,7 @@ def course_list(request):
         'tags': tags
     })
 
-
+@login_required(login_url='login-teacher')
 def create_course(request):
     form = CourseForm()
     if request.method == 'POST':
@@ -111,3 +115,5 @@ def lesson_detail(request, pk):
     return render(request, 'lesson-detail.html', context={
         'lesson': object
     })
+
+

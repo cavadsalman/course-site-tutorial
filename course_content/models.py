@@ -8,7 +8,9 @@ class Tag(models.Model):
         return self.title
 
 
+
 class Course(models.Model):
+    teacher = models.ForeignKey('user.Teacher', on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=100, verbose_name='Basliq')
     description = models.TextField()
     rate = models.IntegerField()

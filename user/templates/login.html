@@ -1,0 +1,17 @@
+{% extends 'layout/layout.html' %}
+
+{% block title %}
+<title>Login</title>
+{% endblock title %}
+
+{% block main %}
+    {% if user_type == 'Student' %}
+        <a href="{% url 'login-teacher' %}">Teacher Login</a>
+    {% endif %}
+    <h1>{{user_type}} Login Panel</h1>
+    <form action="{{request.get_full_path}}" method="post">
+        {% csrf_token %}
+        {{form.as_div}}
+        <input type="submit">
+    </form>
+{% endblock main %}

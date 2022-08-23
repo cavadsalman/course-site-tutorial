@@ -1,0 +1,13 @@
+{% extends 'layout/layout.html' %}
+
+{% block main %}
+    <h1>Teacher Profile of {{request.user.get_full_name}}</h1>
+    {% if teacher.photo %}
+        <img src="{{teacher.photo.url}}" alt="">
+    {% endif %}
+    <form action="{{request.get_full_path}}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_div}}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock main %}
