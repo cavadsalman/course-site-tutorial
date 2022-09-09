@@ -1,6 +1,9 @@
 {% extends 'layout/layout.html' %} 
 {% load static %}
+{% load i18n %}
 {% load course_utils %}
+{% load demo %}
+{% load gutils %}
 
 {% block link %}
     <link rel="stylesheet" href="{% static 'course-list.css' %}"> 
@@ -9,7 +12,7 @@
 {% block main %}
 <div class="container-fluid px-5">
     <div class="row mt-2">
-        <div class="col-12 text-center"><h1>Course List</h1></div>
+        <div class="col-12 text-center"><h1>{% trans "Course List" %}</h1></div>
     </div>
     <div class="row">
         <div class="col-4 p-5">
@@ -51,7 +54,10 @@
                             <img src="{{course.image.url}}" class="card-img-top course-image" />
                             <div class="card-body">
                                 <h5 class="card-title">{{course.title}}</h5>
-                                <p class="card-text">{{course.description|truncatechars:100}}</p>
+                                {% comment %} <p class="card-text">{{course.description|truncatechars:100}}</p> {% endcomment %}
+                                {% comment %} <p class="card-text">{% cut_text course.description %}</p> {% endcomment %}
+                                {% comment %} <p class="card-text">{% general_cut_text course.description 100 %}</p> {% endcomment %}
+                                <p class="card-text">{% general_cut_text course.description 10 %}</p>
                                 <div class="mb-2">
                                     <span class="yellow-stars">
                                         {% for i in course.rate|create_range %}

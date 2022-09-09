@@ -4,10 +4,11 @@
 {% block main %}
     <img src="{{course.image.url}}" alt="">
     <p>{{course.title}}</p>
+    <div>{{course.description|safe}}</div>
     <h3>Lessons</h3>
     <ul>
         {% for lesson in course.lesson_set.all %}
-            <li><a href="{% url 'lesson-detail' pk=lesson.pk %}">{{lesson.title}}</a></li>
+            <li><a href="{% url 'lesson-detail' pk=lesson.pk %}">{{lesson.lang_title}}</a></li>
         {% endfor %}
     </ul>
 {% endblock main %}

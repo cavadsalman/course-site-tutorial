@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import LoginForm, RegisterForm, TeacherForm
+from .forms import LoginForm, RegisterForm, TeacherForm, UserForm
 from django.contrib.auth.models import User
 from .models import Teacher, Student
 from django.contrib.auth import authenticate, login, logout
@@ -74,13 +74,17 @@ def logout_view(request):
 
 def teacher_profile(request, pk):
     teacher = get_object_or_404(Teacher, user=pk)
-    form = TeacherForm(instance=teacher)
+    user_form = UserForm(instance=User.objects.get(pk=pk))
+    teacher_form = TeacherForm(instance=teacher)
     if request.method == 'POST':
-        form = TeacherForm(instance=teacher, data=request.POST, files=request.FILES)
-        if form.is_valid():
-            form.save()
+        teacher_form = TeacherForm(instance=teacher, data=request.POST, files=request.FILES)
+        user_form = UserForm(instance=User.objects.get(pk=pk), data=request.POST)
+        if teacher_form.is_valid() and user_form.is_valid():
+            user_form.save()
+            teacher_form.save()
             return redirect(request.get_full_path())
     return render(request, 'teacher-profile.html', context={
-        'form': form,
+        'teacher_form': teacher_form,
+        'user_form': user_form,
         'teacher': teacher
     })

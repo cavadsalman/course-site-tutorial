@@ -1,13 +1,20 @@
 {% extends 'layout/layout.html' %}
-
+{% load static %}
 {% block main %}
     <h1>Teacher Profile of {{request.user.get_full_name}}</h1>
     {% if teacher.photo %}
-        <img src="{{teacher.photo.url}}" alt="">
+        <img src="{{teacher.photo.url}}" width="200" alt="">
     {% endif %}
     <form action="{{request.get_full_path}}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{form.as_div}}
+        {{user_form.as_div}}
+        {{teacher_form.as_div}}
         <button type="submit">Submit</button>
     </form>
+    
 {% endblock main %}
+
+{% block script %}
+<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+{% endblock script %}

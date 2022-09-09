@@ -49,7 +49,7 @@ def create_course(request):
             form.save()
             return redirect('create-course')
 
-    courses = Course.objects.all().annotate(lesson_count=Count('lesson'))
+    courses = request.user.teacher.course_set.all().annotate(lesson_count=Count('lesson'))
 
     return render(request, 'create-course.html', context = {
         'form': form,
@@ -57,6 +57,7 @@ def create_course(request):
     })
 
 
+@login_required(login_url='login-teacher')
 def create_lesson(request, pk):
     lessons = Lesson.objects.filter(course=pk)
     form = LessonForm(initial={'course': pk})
@@ -70,12 +71,14 @@ def create_lesson(request, pk):
         'lessons': lessons
     })
 
+@login_required(login_url='login-teacher')
 def delete_lesson(request, pk):
     object = get_object_or_404(Lesson, pk=pk)
     course_pk = object.course.pk
     object.delete()
     return redirect('create-lesson', pk=course_pk)
 
+@login_required(login_url='login-teacher')
 def update_lesson(request, pk):
     object = get_object_or_404(Lesson, pk=pk)
     course_pk = object.course.pk
@@ -89,6 +92,7 @@ def update_lesson(request, pk):
         'form': form,
     })
 
+@login_required(login_url='login-teacher')
 def create_tag(request):
     form = TagForm()
     if request.method == 'POST':

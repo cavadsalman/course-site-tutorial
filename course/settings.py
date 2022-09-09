@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,12 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'course_content',
+    'ckeditor',
     'user',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -65,6 +68,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'gutils': 'utils.templates-utils.general-utils'
+            }
         },
     },
 ]
@@ -105,7 +111,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
+
+LANGUAGES = [
+    ('az', _('Azerbaijani')),
+    ('en', _('English')),
+    ('ru', _('Russian'))
+]
+
+LOCALE_PATHS = ['locale']
 
 TIME_ZONE = 'UTC'
 
@@ -131,3 +145,40 @@ MEDIA_ROOT = 'media'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'CMS',
+        'toolbar_CMS': [
+            ['Format', 'Styles', 'FontSize'],
+            [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'],
+            ['TextColor', 'BGColor'],
+            ['Link', 'Unlink'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Undo', 'Redo'],
+            ['Copy', 'Paste', 'PasteText', 'PasteFromWord'],
+            ['SelectAll', 'Find', 'Replace'],
+            ['NumberedList', 'BulletedList'],
+            ['Outdent', 'Indent'],
+            ['Smiley', 'SpecialChar', 'Blockquote', 'HorizontalRule'],
+            ['Table', 'Image', 'Youtube'],
+            ['ShowBlocks', 'Source', 'About']
+            
+        ],
+        'contentsCss': (
+            # '/staticfiles/ckeditor/customization-files/nunito_font.css',
+            # '/staticfiles/ckeditor/customization-files/bootstrap.css',
+            # '/staticfiles/blog/css/style.css',
+            'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css',
+        ),
+        # 'contentJs': (
+        #     'staticfiles/blog/js/article.js'
+        # )
+    },
+}
+
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_ACCESS_KEY_ID = 'AKIA23RKEPNWTDCX3MMZ'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_SES_REGION_NAME = 'eu-north-1'
+AWS_SES_REGION_ENDPOINT = 'email.eu-north-1.amazonaws.com'

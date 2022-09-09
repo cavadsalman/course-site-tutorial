@@ -2,6 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from .models import Teacher, Student
+from ckeditor.widgets import CKEditorWidget
 
 
 class LoginForm(forms.Form):
@@ -57,8 +58,13 @@ class RegisterForm(forms.Form):
 
 
 class TeacherForm(forms.ModelForm):
+    biography = forms.CharField(widget= CKEditorWidget(config_name='default'))
     class Meta:
         model = Teacher
         exclude = ['user']
 
 
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'username')
