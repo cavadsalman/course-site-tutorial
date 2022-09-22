@@ -1,0 +1,10 @@
+{% extends 'layout/layout.html' %}
+
+{% block main %}
+    <h1>{{object.title}} ({{info}})</h1>
+    <ul>
+        {% for course in object.course_set.all %}
+            <li><a href="{{course.get_absolute_url}}">{{course.title}}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock main %}

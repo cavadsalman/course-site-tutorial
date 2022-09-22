@@ -28,10 +28,10 @@ class CourseAdmin(admin.ModelAdmin):
             'classes': ('show',)
         }),
         ('Detallar', {
-            'fields': ('tag', 'rate', 'price', ('image_tag', 'image'), 'active', ('updated', 'created'))
+            'fields': ('tag', 'rate', 'view_count', 'price', ('image_tag', 'image'), 'active', ('updated', 'created'))
         })
     )
-    readonly_fields = ('image_tag', 'updated', 'created')
+    readonly_fields = ('image_tag', 'updated', 'created', 'view_count')
     list_display = ('title', 'teacher', 'price', 'active', 'created', 'course_link', 'lesson_count')
     list_display_links = ('title',)
     list_filter = ('teacher', 'tag', 'updated')

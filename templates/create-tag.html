@@ -1,7 +1,7 @@
 {% extends 'layout/layout.html' %}
 
 {% block main %}
-    <h1>Tag List</h1>
+    <h1>Tag List ({{count}})</h1>
     <ul>
         {% for tag in tags %}
             <li>{{tag.title}}</li>

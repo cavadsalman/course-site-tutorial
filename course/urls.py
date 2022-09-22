@@ -22,9 +22,9 @@ from django.conf.urls.i18n import i18n_patterns
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('admin/', admin.site.urls),
+    path('', include('course_content.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(
-    path('', include('course_content.urls')),
     path('auth/', include('user.urls')),
 )

@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-
 from .forms import (
     TagForm, 
     CourseForm, 
@@ -8,9 +7,14 @@ from .forms import (
     CourseSearchForm,
     CoursePriceForm
 )
+from django.urls import reverse_lazy
 from .models import Course, Tag, Lesson
 from django.db.models import Count
-
+from django.views.generic.edit import FormView, CreateView, DeleteView, UpdateView
+from django.views.generic import DetailView, ListView
+from django.db.models import F, Value
+from time import sleep
+from django.db.models import IntegerField
 # Create your views here.
 
 @login_required(login_url='login-student')
@@ -108,16 +112,72 @@ def create_tag(request):
     })
 
 
+# class CreateTagView(FormView):
+#     template_name = 'create-tag.html'
+#     form_class = TagForm
+#     success_url = reverse_lazy('create-tag')
+    
+#     def form_valid(self, form):
+#         form.save()
+#         return super().form_valid(form)
+class CreateTagView(CreateView):
+    model = Tag
+    fields = ['title']
+    template_name = 'create-tag.html'
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['tags'] = Tag.objects.all()
+        context['count'] = context['tags'].count()
+        return context
+    
+
 def course_detail(request, pk):
     object = get_object_or_404(Course, pk=pk)
     return render(request, 'course-detail.html', context={
         'course': object
     })
+    
+class CourseDeatilView(DetailView):
+    model = Course
+    template_name = 'course-detail.html'
+    context_object_name = 'course'
+    
+    def get_object(self, *args, **kwargs):
+        object = super().get_object(*args, **kwargs)
+        object.view_count = F('view_count') + 1
+        object.save()
+        object.refresh_from_db()
+        return object
 
-def lesson_detail(request, pk):
+def lesson_detail(request, pk): 
     object = get_object_or_404(Lesson, pk=pk)
     return render(request, 'lesson-detail.html', context={
         'lesson': object
     })
 
+class TagDetailView(DetailView):
+    model = Tag
+    # template_name = 'course_content/tag_detail.html'
+    # context_object_name = 'object'
+    # queryset = Tag.objects.all()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["info"] = self.kwargs.get('info')
+        return context
+    
 
+class LessonListView(ListView):
+    model = Lesson
+    # queryset = Lesson.objects.all()
+    paginate_by = 3
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset(*args, **kwargs)
+        queryset = queryset.filter(course=self.kwargs.get('course_pk'))
+        return queryset
+        
+    
+
+def about(request):
+    return render(request, 'about.html')

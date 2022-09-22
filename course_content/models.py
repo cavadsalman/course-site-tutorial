@@ -11,6 +11,10 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse("tag-detail", kwargs={"pk": self.pk, "info": "info"})
+    
 
 
 
@@ -20,6 +24,7 @@ class Course(models.Model):
     description = RichTextField()
     rate = models.IntegerField()
     tag = models.ManyToManyField(Tag)
+    view_count = models.IntegerField(default=0)
     price = models.FloatField()
     image = models.ImageField(upload_to='course_image/')
     active = models.BooleanField(default=True)
